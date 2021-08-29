@@ -66,7 +66,7 @@ OK
 - 当前值不存在才设置  setnx
 
 ```bash
-127.0.0.1:6379> setex key3 20 "gnardada"
+127.0.0.1:6379> setex key3 20 "gnardada"  # 设置key3 的值为 gnardada ，20秒后过期
 OK
 127.0.0.1:6379> ttl key3
 (integer) 13
@@ -82,12 +82,50 @@ OK
 (nil)
 127.0.0.1:6379> ttl key3
 (integer) -2
-127.0.0.1:6379> setnx mykey "redis"
+127.0.0.1:6379> setnx mykey "redis"  # 如果mykey 不存在，创建mykey
 (integer) 1
 127.0.0.1:6379> keys *
 1) "key2"
 2) "key1"
 3) "mykey"
-127.0.0.1:6379> setnx mykey "MongoDB"
+127.0.0.1:6379> setnx mykey "MongoDB"  # 如果mykey存在，创建失败
 (integer) 0
+```
+
+- 批量设置值 mset
+- 批量获取值 mget
+```bash
+127.0.0.1:6379> mset k1 v1 k2 v2 k3 v3  # 同时设置多个值
+OK
+127.0.0.1:6379> keys *
+1) "k2"
+2) "k3"
+3) "k1"
+127.0.0.1:6379> msetnx k1 v1 k4 v4  #msetnx 是一个原子性操作，要么一起成功，要么一起失败
+(integer) 0
+127.0.0.1:6379> keys *
+1) "k2"
+2) "k3"
+3) "k1"
+127.0.0.1:6379> mget k1 k2 k3   # 同时获取多个值
+1) "v1"
+2) "v2"
+3) "v3"
+127.0.0.1:6379> set user:1 {name:kindred,age:1500}   # redis存放对象的常用方式  存一个json字符串
+OK
+127.0.0.1:6379> mset user:1:name gnar user:1:age 8   # key的巧妙设计 {ObjectName}:{id}:{filed}
+OK
+127.0.0.1:6379> mget user:1:name user:1:age
+1) "gnar"
+2) "8"
+```
+
+- 先获取一次再设置 getset key value
+```bash
+127.0.0.1:6379> getset db "database"  # 不存在返回nil，再设置新值
+(nil)
+127.0.0.1:6379> getset db "mysql"     # 有值先返回值，再设置值
+"database"
+127.0.0.1:6379> get db
+"mysql"
 ```
