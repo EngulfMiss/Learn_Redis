@@ -240,3 +240,64 @@ OK
 127.0.0.1:6379> linsert list after kindred test
 (integer) 5
 ```
+
+# Set(不允许有重复元素)
+```bash
+127.0.0.1:6379> sadd myset "hello"    # set集合中添加元素
+(integer) 1
+127.0.0.1:6379> sadd myset "world"
+(integer) 1
+127.0.0.1:6379> sadd myset "kindred"
+(integer) 1
+
+
+127.0.0.1:6379> smembers myset        #  查看指定set的所有值
+1) "kindred"
+2) "hello"
+3) "world"
+127.0.0.1:6379> sismember myset kindred     #   判断某一个值是不是在set集合中
+(integer) 1
+127.0.0.1:6379> sismember myset gnar
+(integer) 0
+
+
+127.0.0.1:6379> scard myset         #   获取set集合中的内容元素个数
+(integer) 3
+
+
+127.0.0.1:6379> srem myset kindred    #  从set集合中移除指定元素
+(integer) 1
+127.0.0.1:6379> scard myset
+(integer) 2
+127.0.0.1:6379> smembers myset
+1) "hello"
+2) "world"
+
+
+127.0.0.1:6379> sadd myset kindred gnar neeko
+(integer) 3
+127.0.0.1:6379> scard myset
+(integer) 5
+127.0.0.1:6379> srandmember myset    # 从set集合中随机抽出一个元素  可以在后面再加一个个数参数
+"kindred"
+
+
+127.0.0.1:6379> spop myset      # 随机删除一个set集合中的元素
+"kindred"
+
+
+127.0.0.1:6379> sadd myset hello world kindred gnar neeko
+(integer) 5
+127.0.0.1:6379> sadd myset2 set2
+(integer) 1
+127.0.0.1:6379> smove myset myset2 kindred        #  将一个指定的值从一个集合移动到另一个集合
+(integer) 1
+127.0.0.1:6379> smembers myset
+1) "gnar"
+2) "hello"
+3) "world"
+4) "neeko"
+127.0.0.1:6379> smembers myset2
+1) "kindred"
+2) "set2"
+```
