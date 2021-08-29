@@ -300,4 +300,22 @@ OK
 127.0.0.1:6379> smembers myset2
 1) "kindred"
 2) "set2"
+
+
+127.0.0.1:6379> sadd myset a b c d
+(integer) 4
+127.0.0.1:6379> sadd myset2 b c d e
+(integer) 4
+127.0.0.1:6379> sdiff myset myset2     #  查看两个集合的差集
+1) "a"
+127.0.0.1:6379> sinter myset myset2     #  查看两个集合的交集
+1) "b"
+2) "d"
+3) "c"
+127.0.0.1:6379> sunion myset myset2      #  查看两个集合的并集
+1) "d"  
+2) "c"
+3) "a"
+4) "e"
+5) "b"
 ```
