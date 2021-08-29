@@ -319,3 +319,89 @@ OK
 4) "e"
 5) "b"
 ```
+
+
+# Hash(哈希)
+类似Map集合，key-map  
+```bash
+127.0.0.1:6379> hset myhash name kindred       # 设置map的属性
+(integer) 1
+127.0.0.1:6379> hget myhash name               #  获取指定键的值
+"kindred"
+
+
+127.0.0.1:6379> hmset myhash age 1500 level 7    # 批量设置map的属性
+OK
+127.0.0.1:6379> hmget myhash name age level      # 批量获取map的属性
+1) "kindred"
+2) "1500"
+3) "7"
+
+
+127.0.0.1:6379> hgetall myhash              # 获取hash中所有的键值对  key-value
+1) "name"
+2) "kindred"
+3) "age"
+4) "1500"
+5) "level"
+6) "7"
+127.0.0.1:6379> hkeys myhash                #  获取hash中所有的键  field
+1) "name"
+2) "age"
+3) "level"
+
+
+
+127.0.0.1:6379> hdel myhash age            # 删除指定键的值  可变参数
+(integer) 1
+127.0.0.1:6379> hgetall myhash
+1) "name"
+2) "kindred"
+3) "level"
+4) "7"
+
+
+127.0.0.1:6379> hlen myhash             # 获取hash 键值对个数
+(integer) 2
+
+
+127.0.0.1:6379> hexists myhash name     # 判断hash中是否有指定的key 有返回1
+(integer) 1
+127.0.0.1:6379> hexists myhash test
+(integer) 0
+
+
+127.0.0.1:6379> hset myhash level 5
+(integer) 0
+127.0.0.1:6379> hgetall myhash
+1) "name"
+2) "kindred"
+3) "level"
+4) "5"
+5) "age"
+6) "1500"
+127.0.0.1:6379> hincrby myhash level 2     # 为hash中的某个field对应的值增加步长
+(integer) 7
+
+
+127.0.0.1:6379> hsetnx myhash level 5      #  如果不存在才执行
+(integer) 0
+127.0.0.1:6379> hgetall myhash
+1) "name"
+2) "kindred"
+3) "level"
+4) "7"
+5) "age"
+6) "1500"
+127.0.0.1:6379> hsetnx myhash test test    #  如果不存在才执行
+(integer) 1
+127.0.0.1:6379> hgetall myhash
+1) "name"
+2) "kindred"
+3) "level"
+4) "7"
+5) "age"
+6) "1500"
+7) "test"
+8) "test"
+```
