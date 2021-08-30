@@ -42,3 +42,34 @@ spring:
     host: 123.57.8.252
     port: 6379
 ```
+3. 测试
+```java
+@SpringBootTest
+class Redis02SpringbootApplicationTests {
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Test
+    void contextLoads() {
+        // redisTemplate  操作不同的数据类型
+        // opsForValue  操作字符串  类似String
+        // opsForList   操作字符串  类似List
+        // opsForXxx    类似Xxx
+        redisTemplate.opsForValue().set("name","千珏");
+        String name = (String) redisTemplate.opsForValue().get("name");
+        System.out.println(name);
+
+
+        // 除了基本操作，常用的方法都可以直接通过redisTemplate操作，比如事务
+        // redisTemplate.multi();
+//        redisTemplate.multi();
+
+        //获取redis连接对象，操作数据库，比如flushDb
+//        RedisConnection connection = redisTemplate.getConnectionFactory().getConnection();
+//        connection.flushDb();
+
+    }
+
+}
+```
