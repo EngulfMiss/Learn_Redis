@@ -38,4 +38,19 @@ QUEUED
 QUEUED
 127.0.0.1:6379> exec           # 在执行事务之前，使用另一个redis客户端对money的值进行了修改
 (nil)
+
+
+127.0.0.1:6379> unwatch        #  版本不一致了，重新监视money
+OK
+127.0.0.1:6379> watch money
+OK
+127.0.0.1:6379> multi
+OK
+127.0.0.1:6379> decrby money 10
+QUEUED
+127.0.0.1:6379> incrby out 10
+QUEUED
+127.0.0.1:6379> exec
+1) (integer) 140
+2) (integer) 30
 ```
