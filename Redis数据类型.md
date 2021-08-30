@@ -405,3 +405,60 @@ OK
 7) "test"
 8) "test"
 ```
+
+
+# Zset(有序集合)
+在set的基础上，增加了一个值   set k1 v1   -->    zset k1 score v1   
+```bash
+127.0.0.1:6379> zadd myzset 1 kindred      # 添加一个值  
+(integer) 1
+127.0.0.1:6379> zadd myzset 2 gnar 3 neeko    #  添加多个值
+(integer) 2
+127.0.0.1:6379> zrange myzset 0 -1      # 遍历zset的值
+1) "kindred" 
+2) "gnar"
+3) "neeko"
+
+
+127.0.0.1:6379> zadd salary 2500 kindred 1000 gnar 500 neeko
+(integer) 3
+127.0.0.1:6379> zrangebyscore salary -inf +inf       #  zrangebyscore 按照score字段升序排序显示value
+1) "neeko"
+2) "gnar"
+3) "kindred"
+127.0.0.1:6379> zrangebyscore salary -inf +inf withscores     #  按照score字段升序排序显示value，并显示score
+1) "neeko"
+2) "500"
+3) "gnar"
+4) "1000"
+5) "kindred"
+6) "2500"
+127.0.0.1:6379> zrevrangebyscore salary +inf -inf     #  zrevrangebyscore 按照score字段降序排序显示value
+1) "kindred"
+2) "gnar"
+3) "neeko"
+
+
+127.0.0.1:6379> zrange salary 0 -1
+1) "neeko"
+2) "gnar"
+3) "kindred"
+127.0.0.1:6379> zrem salary neeko           # 有序集合中移除一个元素
+(integer) 1
+127.0.0.1:6379> zrange salary 0 -1
+1) "gnar"
+2) "kindred"
+
+
+127.0.0.1:6379> zcard salary        # 获取有序集合的元素个数
+(integer) 2
+
+
+127.0.0.1:6379> flushdb
+OK
+127.0.0.1:6379> clear
+127.0.0.1:6379> zadd myzset 1 kindred 2 gnar 3 neeko    
+(integer) 3
+127.0.0.1:6379> zcount myzset 1 3        #  获取指定score区间的值的数量
+(integer) 3
+```
